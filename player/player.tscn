@@ -3,7 +3,7 @@
 [ext_resource type="Script" path="res://player/player.gd" id="1_l20mn"]
 [ext_resource type="Texture2D" uid="uid://crv7ctf3cf5ce" path="res://spritesheet/knight.png" id="1_r2nrn"]
 
-[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_t2yx5"]
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_cvfmi"]
 radius = 5.0
 height = 20.0
 
@@ -73,9 +73,12 @@ hframes = 8
 vframes = 8
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-shape = SubResource("CapsuleShape2D_t2yx5")
+shape = SubResource("CapsuleShape2D_cvfmi")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
 "": SubResource("AnimationLibrary_uxukn")
 }
+
+[node name="ray_floor" type="RayCast2D" parent="."]
+target_position = Vector2(0, 16)

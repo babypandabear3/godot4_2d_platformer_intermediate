@@ -14,7 +14,7 @@ enum {
 
 @export var dash_time : float = 0.2
 @export var dash_speed : float = 300.0
-@export var wallcling_gravity : float = 0.5
+@export var wallcling_gravity : float = 1000.0
 @export var walljump_time : float = 0.2
 
 const SPEED = 200.0
@@ -35,6 +35,7 @@ var walljump_dir = 1
 
 @onready var animation_player = $AnimationPlayer
 @onready var knight = $Knight
+@onready var ray_floor = $ray_floor
 
 func _physics_process(delta):
 	match state:
@@ -104,7 +105,8 @@ func do_dash(delta):
 	var direction = 1.0
 	if knight.flip_h:
 		direction = -1.0
-	velocity = Vector2.RIGHT * direction * dash_speed
+	velocity.x = direction * dash_speed
+	velocity.y = 0.0
 	move_and_slide()
 	
 	dash_timer += delta
@@ -112,13 +114,17 @@ func do_dash(delta):
 		state = NORMAL
 		
 	#OPTIONAL BEHAVIOR
+	if not ray_floor.is_colliding() and jump_count == 0:
+		jump_count = 1
+	
 	if Input.is_action_just_pressed("jump") :
 		jump_buffer = jump_buffer_time
 		state = NORMAL
 
 func do_wall_cling(delta):
 	var direction = Input.get_axis("ui_left", "ui_right")
-	velocity = (Vector2.RIGHT * direction) + (Vector2.DOWN * gravity * wallcling_gravity * delta)
+	velocity.x = direction
+	velocity.y = wallcling_gravity * delta
 	move_and_slide()
 	
 	if is_equal_approx(direction, 0.0):
